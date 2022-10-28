@@ -1,0 +1,21 @@
+*{
+    font-family: Avenir, sans-serif;
+    font-size: 1em;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.container > div{
+    padding: 20px 0px;
+    background-color: #ED8;
+    border: 1px dashed black;
+}
+
+.container > div > button{
+    width: 50%;
+}

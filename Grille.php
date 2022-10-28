@@ -3,56 +3,54 @@ require_once("./Cases.php");
 class grille{
 
     private array $cases;
+    private int $counter;
 
-    public function __construct(){
+    private static $_instance = null;
+
+    private function __construct(){
+        $this->counter = 0;
         $index = 0;
-        for($x = 0; $x < 9; $x++){
-            for($y = 0; $y < 9; $y++){
+        for($x = 0; $x < 3; $x++){
+            for($y = 0; $y < 3; $y++){
                 $this->cases[$index] = new Cases($x, $y);
                 $index++;
             }
         }
     }
 
-    //make random location for place symbol
-    public function askLocation(String $value): bool{
-        try {
-            $x = random_int(0, 8);
-            $y = random_int(0, 8);
-            return $this->play($x, $y, $value);
-        } catch (Exception $e) {
-            echo $e;
+    public static function getInstance(): self{
+        if(is_null(self::$_instance)) {
+            self::$_instance = new Grille();
         }
-        return false;
+
+        return self::$_instance;
     }
 
-    /*
-     * try to place a symbol in case
-     * return true if game is win
-     */
-    private function play(int $x, int $y, String $value): bool{
-        $case = new Cases($x, $y);
-        while(!$this->changeValueOf($case, $value)) {
-            $this->askLocation($value);
+    public function generateGrille(): void{
+        echo "<form id='interactCase' method='post'></form> <div class='container'>";
+        $index = 0;
+        foreach($this->cases as $case){
+            echo $case->showCase($index);
+            $index++;
         }
-
-        return $this->checkWin();
+        echo "</div>";
     }
 
     /*
      * change value if the case is not busy
      */
-    private function changeValueOf(Cases $case, String $value): bool{
-        $result = false;
-        foreach($this->cases as $c){
-            if($c->equals($case)){
-                if(!$c->isBusy()) {
-                    $c->setValue($value);
-                    $result = true;
-                }
-            }
+    public function changeValueOf(int $nb_case){
+        $c = $this->cases[$nb_case];
+        echo "<script>console.log($this->counter)</script>";
+        if($this->counter % 2 == 0){
+           $c->setValue(caseValue::CROSS);
+        }else{
+            $c->setValue(caseValue::CIRCLE);
         }
-        return $result;
+
+        $this->cases[$nb_case] = $c;
+        $this->counter++;
+        //$this->checkWin();
     }
 
     //return true if the game is finish and print the winner

@@ -5,6 +5,7 @@ require_once("./Coordonnee.php");
 abstract class caseValue{
     const CIRCLE = "O";
     const CROSS = "X";
+    const EMPTY = "*";
 
 }
 
@@ -15,6 +16,7 @@ class Cases{
 
     public function __construct(int $x, int $y){
         $this->loc = new Location($x, $y);
+        $this->value = caseValue::EMPTY;
     }
 
     //return location's case
@@ -37,6 +39,13 @@ class Cases{
         return $this->value;
     }
 
+    public function showCase(int $i): String{
+        if($this->value == caseValue::EMPTY){
+            return "<div><button form='interactCase' name='btn_case' value='$i'>$i</button></div>";
+        }
+        return "<div><p>$this->value</p></div>";
+    }
+
     //Check if equals by location
     public function equals(Cases $case): bool{
         return ($case->getLocation()->getX() == $this->loc->getX() && $case->getLocation()->getY() == $this->loc->getY());
@@ -47,4 +56,3 @@ class Cases{
         return ($this->value === $case->getValue());
     }
 }
-?>
